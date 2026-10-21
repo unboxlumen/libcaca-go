@@ -1,0 +1,7 @@
+# Character-art fixtures are byte-exact oracles generated from C libcaca.
+# The ANSI/UTF-8-CR/IRC exports are CRLF by design, so Git must store and
+# check them out verbatim: core.autocrlf=input would normalize them to LF and
+# make the golden tests fail on a fresh clone.
+codec/testdata/** -text
+dither/testdata/** -text
+font/testdata/** -text

@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="72" height="40" viewBox="0 0 72 40" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" version="1.1"  baseProfile="full">
+ <g id="mainlayer" font-size="10" style="font-family: monospace">
+<rect style="fill:#000" x="0" y="0" width="6" height="10"/>
+<rect style="fill:#000" x="6" y="0" width="6" height="10"/>
+<rect style="fill:#000" x="12" y="0" width="6" height="10"/>
+<rect style="fill:#000" x="18" y="0" width="6" height="10"/>
+<rect style="fill:#000" x="24" y="0" width="6" height="10"/>
+<rect style="fill:#000" x="30" y="0" width="6" height="10"/>
+<rect style="fill:#000" x="36" y="0" width="6" height="10"/>
+<rect style="fill:#555" x="42" y="0" width="6" height="10"/>
+<rect style="fill:#555" x="48" y="0" width="6" height="10"/>
+<rect style="fill:#555" x="54" y="0" width="6" height="10"/>
+<rect style="fill:#555" x="60" y="0" width="6" height="10"/>
+<rect style="fill:#555" x="66" y="0" width="6" height="10"/>
+<rect style="fill:#00a" x="0" y="10" width="6" height="10"/>
+<rect style="fill:#00a" x="6" y="10" width="6" height="10"/>
+<rect style="fill:#00a" x="12" y="10" width="6" height="10"/>
+<rect style="fill:#00a" x="18" y="10" width="6" height="10"/>
+<rect style="fill:#00a" x="24" y="10" width="6" height="10"/>
+<rect style="fill:#00a" x="30" y="10" width="6" height="10"/>
+<rect style="fill:#00a" x="36" y="10" width="6" height="10"/>
+<rect style="fill:#555" x="42" y="10" width="6" height="10"/>
+<rect style="fill:#000" x="48" y="10" width="6" height="10"/>
+<rect style="fill:#000" x="54" y="10" width="6" height="10"/>
+<rect style="fill:#000" x="60" y="10" width="6" height="10"/>
+<rect style="fill:#555" x="66" y="10" width="6" height="10"/>
+<rect style="fill:#000" x="0" y="20" width="6" height="10"/>
+<rect style="fill:#000" x="6" y="20" width="6" height="10"/>
+<rect style="fill:#000" x="12" y="20" width="6" height="10"/>
+<rect style="fill:#000" x="18" y="20" width="6" height="10"/>
+<rect style="fill:#000" x="24" y="20" width="6" height="10"/>
+<rect style="fill:#000" x="30" y="20" width="6" height="10"/>
+<rect style="fill:#000" x="36" y="20" width="6" height="10"/>
+<rect style="fill:#555" x="42" y="20" width="6" height="10"/>
+<rect style="fill:#000" x="48" y="20" width="6" height="10"/>
+<rect style="fill:#555" x="54" y="20" width="6" height="10"/>
+<rect style="fill:#555" x="60" y="20" width="6" height="10"/>
+<rect style="fill:#555" x="66" y="20" width="6" height="10"/>
+<rect style="fill:#555" x="0" y="30" width="6" height="10"/>
+<rect style="fill:#555" x="6" y="30" width="6" height="10"/>
+<rect style="fill:#555" x="12" y="30" width="6" height="10"/>
+<rect style="fill:#555" x="18" y="30" width="6" height="10"/>
+<rect style="fill:#555" x="24" y="30" width="6" height="10"/>
+<rect style="fill:#555" x="30" y="30" width="6" height="10"/>
+<rect style="fill:#000" x="36" y="30" width="6" height="10"/>
+<rect style="fill:#555" x="42" y="30" width="6" height="10"/>
+<rect style="fill:#555" x="48" y="30" width="6" height="10"/>
+<rect style="fill:#555" x="54" y="30" width="6" height="10"/>
+<rect style="fill:#555" x="60" y="30" width="6" height="10"/>
+<rect style="fill:#555" x="66" y="30" width="6" height="10"/>
+<text style="fill:#aaa" x="0" y="8">l</text>
+<text style="fill:#aaa" x="6" y="8">i</text>
+<text style="fill:#aaa" x="12" y="8">b</text>
+<text style="fill:#aaa" x="18" y="8">c</text>
+<text style="fill:#aaa" x="24" y="8">a</text>
+<text style="fill:#aaa" x="30" y="8">c</text>
+<text style="fill:#aaa" x="36" y="8">a</text>
+<text style="fill:#ff5" font-weight="bold" x="42" y="8">#</text>
+<text style="fill:#ff5" font-weight="bold" x="48" y="8">#</text>
+<text style="fill:#ff5" font-weight="bold" x="54" y="8">#</text>
+<text style="fill:#ff5" font-weight="bold" x="60" y="8">#</text>
+<text style="fill:#ff5" font-weight="bold" x="66" y="8">#</text>
+<text style="fill:#a00" x="0" y="18">G</text>
+<text style="fill:#a00" x="6" y="18">o</text>
+<text style="fill:#a00" x="18" y="18">p</text>
+<text style="fill:#a00" x="24" y="18">o</text>
+<text style="fill:#a00" x="30" y="18">r</text>
+<text style="fill:#a00" x="36" y="18">t</text>
+<text style="fill:#ff5" font-weight="bold" x="42" y="18">#</text>
+<text style="fill:#ff5" font-weight="bold" x="66" y="18">#</text>
+<text style="fill:#ff5" font-weight="bold" x="42" y="28">#</text>
+<text style="fill:#ff5" x="54" y="28">⼆</text>
+<text style="fill:#ff5" font-weight="bold" x="66" y="28">#</text>
+<text style="fill:#ff5" font-weight="bold" x="0" y="38">s</text>
+<text style="fill:#ff5" font-weight="bold" x="6" y="38">t</text>
+<text style="fill:#ff5" font-weight="bold" x="12" y="38">y</text>
+<text style="fill:#ff5" font-weight="bold" x="18" y="38">l</text>
+<text style="fill:#ff5" font-weight="bold" x="24" y="38">e</text>
+<text style="fill:#ff5" font-weight="bold" x="30" y="38">s</text>
+<text style="fill:#ff5" font-weight="bold" x="42" y="38">#</text>
+<text style="fill:#ff5" font-weight="bold" x="48" y="38">#</text>
+<text style="fill:#ff5" font-weight="bold" x="54" y="38">#</text>
+<text style="fill:#ff5" font-weight="bold" x="60" y="38">#</text>
+<text style="fill:#ff5" font-weight="bold" x="66" y="38">#</text>
+ </g>
+</svg>
