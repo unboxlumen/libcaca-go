@@ -1,11 +1,14 @@
 # nfilesart
 
 `nfilesart` is a pure Go colour ASCII-art toolkit. It is a port of the
-**core of [libcaca](https://github.com/cacalabs/libcaca)** — the
-`caca/` library sources — with no cgo and no C dependency. Output is
-byte-compatible with libcaca 0.99.beta20 for the native, ANSI, UTF-8, HTML,
-HTML3, BBCode, IRC, PostScript, SVG and troff formats, and the dithering
-pipeline reproduces the C implementation's choices.
+**core of [libcaca](https://github.com/cacalabs/libcaca)** — the `caca/`
+library sources — with no cgo and no C dependency.
+
+The port targets libcaca **0.99.beta20** (upstream commit `de48e1a`) and is
+released as **v0.99.20**, keeping the version aligned with the C library it
+mirrors. Output is byte-compatible with libcaca for the native, ANSI, UTF-8,
+HTML, HTML3, BBCode, IRC, PostScript, SVG and troff formats; the dithering
+pipeline reproduces the C implementation's choices exactly.
 
 ```go
 import (
@@ -20,23 +23,30 @@ _ = d.Draw(c, 0, 0, 80, 24)
 ansi, _ := codec.Export(c, "ansi")
 ```
 
-## License
+## Status
 
-**WTFPL v2** — see [LICENSE](LICENSE). Do what the fuck you want to.
+| Area | State |
+|---|---|
+| Character grid, attributes, frames, dirty rectangles | complete, byte-compatible |
+| Drawing primitives and transforms | complete |
+| Dithering (6 algorithms, 7 colour modes, 3 charsets) | complete, golden-tested |
+| Import: `caca`, `text`, `ansi`, `utf8`, `bin`, auto-detect | complete |
+| Export: `caca`, `ansi`, `utf8`, `utf8cr`, `html`, `html3`, `bbfr`, `irc`, `ps`, `svg`, `tga`, `troff` | complete |
+| Bitmap fonts (libcaca `.data`), FIGlet/TOIlet FIGfonts | complete |
+| Display backends | `tcell` (pure Go) and `null` |
+| Platform drivers, `caca0`/`conio` compatibility layers | not ported |
 
-All Go code here derives from libcaca's WTFPL-licensed `caca/` sources
-(Copyright © Sam Hocevar and contributors, WTFPL v2). The GPL/LGPL parts of
-the libcaca tree — `kernel/multiboot.h` (GPL), `src/aafire.c` and
-`examples/demo0.c` (LGPL) — were **not** used. See
-[PROVENANCE.md](PROVENANCE.md) for a per-package list of the reference
-sources and for the licensing notes on the upstream tree.
+Differences from the C library are intentional and documented: random
+dithering uses a fixed seed so output is reproducible, and the TGA exporter
+renders with Go Mono by default instead of libcaca's bundled bitmap font.
 
-Every Go file carries the attribution header:
+## Install
 
+```sh
+go get github.com/unboxlumen/libcaca-go@v0.99.20
 ```
-nfilesart is a Go port of the core of libcaca, the WTFPL-licensed
-caca/ library sources by Sam Hocevar ...
-```
+
+Requires Go 1.26 or newer.
 
 ## Packages
 
@@ -44,7 +54,7 @@ caca/ library sources by Sam Hocevar ...
 |---|---|
 | `canvas` | Character grid: cells, attributes, frames, dirty rectangles, primitives, transforms |
 | `dither` | Bitmap → character cells: 6 algorithms, 7 colour modes, 3 glyph ramps |
-| `codec` | Import/export: `caca`, `ansi`, `utf8`, `utf8cr`, `html`, `html3`, `bbfr`, `irc`, `ps`, `svg`, `tga`, `troff`, plus `text` and `bin` import |
+| `codec` | Import/export in the formats listed above |
 | `font` | Go Mono by default, libcaca native bitmap fonts, FIGlet/TOIlet FIGfonts, canvas rendering |
 | `charset` | Fullwidth classification, CP437, ASCII |
 | `display` | Backend contract and the libcaca event/key model |
@@ -85,7 +95,21 @@ go test -bench . ./dither ./codec
 83 golden fixtures are checked in under `*/testdata/golden/`. They were
 produced by the C library using the small programs in `*/testdata/gen/`, so
 the tests compare nfilesart's bytes against libcaca's own output rather than
-against a hand-written expectation.
+against hand-written expectations.
+
+## License
+
+**WTFPL v2** — see [LICENSE](LICENSE). Do what the fuck you want to.
+
+All Go code here derives from libcaca's WTFPL-licensed `caca/` sources
+(Copyright © Sam Hocevar and contributors, WTFPL v2). The GPL/LGPL parts of
+the libcaca tree — `kernel/multiboot.h` (GPL), `src/aafire.c` and
+`examples/demo0.c` (LGPL) — were **not** used. See
+[PROVENANCE.md](PROVENANCE.md) for a per-package list of the reference
+sources and for the licensing notes on the upstream tree.
+
+Every Go file carries an attribution header naming the upstream file and
+license.
 
 ## Relationship to other projects
 
@@ -99,6 +123,13 @@ against a hand-written expectation.
 
 ## Package documentation
 
-Run `go doc ./...` or `go doc github.com/unboxlumen/libcaca-go/canvas`, or
-read the rendered docs at <https://pkg.go.dev/github.com/unboxlumen/libcaca-go>.
-The umbrella package comment in [doc.go](doc.go) gives the overall map.
+Run `go doc ./...`, or read the rendered docs at
+<https://pkg.go.dev/github.com/unboxlumen/libcaca-go>. The umbrella package
+comment in [doc.go](doc.go) gives the overall map.
+
+## Versioning
+
+Tags follow Go module semantics (`vX.Y.Z`). `v0.99.20` corresponds to
+libcaca 0.99.beta20; patches to this port will increment the patch number
+(`v0.99.21`, …) rather than moving to `1.0` until the display-driver surface
+reaches parity with the C library.

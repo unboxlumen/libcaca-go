@@ -1,7 +1,22 @@
-# Build output
+# Compiled binaries and build output
 /demo
 /img2txt
+/cmd/demo/demo
+/cmd/img2txt/img2txt
+*.test
+*.out
+/coverage.txt
+/coverage.html
+
+# Go workspace files
+go.work
+go.work.sum
 
 # Editor and OS cruft
 .DS_Store
+Thumbs.db
 *.swp
+*.swo
+*~
+.idea/
+.vscode/
