@@ -300,6 +300,13 @@ func importANSI(c *canvas.Canvas, data []byte, isUTF8 bool) (int, error) {
 			x = 0
 			y++
 			i++
+			// libcaca runs its common wrap/grow step for every iteration,
+			// including newlines with no character attached, so a trailing
+			// newline still adds a blank row.
+			var err error
+			if x, y, err = im.settle(c, x, y, 0, &width, &height, growx, growy); err != nil {
+				return 0, err
+			}
 
 		case ch == '\t':
 			x = (x + 8) &^ 7
@@ -346,6 +353,10 @@ func importANSI(c *canvas.Canvas, data []byte, isUTF8 bool) (int, error) {
 			}
 			_ = nw
 			_ = nh
+			var err error
+			if x, y, err = im.settle(c, x, y, 0, &width, &height, growx, growy); err != nil {
+				return 0, err
+			}
 
 		case ch == 0x1b && i+1 < len(data) && data[i+1] == ']':
 			// OSC: skip to BEL, or stop if incomplete.
@@ -381,43 +392,10 @@ func importANSI(c *canvas.Canvas, data []byte, isUTF8 bool) (int, error) {
 				i++
 			}
 
-			for x+wch > width {
-				if growx {
-					saved := c.CurAttr()
-					c.SetAttr(im.clearAttr)
-					if err := c.Resize(x+wch, height); err != nil {
-						return 0, err
-					}
-					width = x + wch
-					c.SetAttr(saved)
-				} else {
-					x -= width
-					y++
-				}
-			}
-			if y >= height {
-				saved := c.CurAttr()
-				c.SetAttr(im.clearAttr)
-				if growy {
-					if err := c.Resize(width, y+1); err != nil {
-						return 0, err
-					}
-					height = y + 1
-				} else {
-					lines := y - height + 1
-					for j := 0; j+lines < height; j++ {
-						for k := 0; k < width; k++ {
-							c.SetCell(k, j, c.CellAt(k, j+lines))
-						}
-					}
-					for j := height - lines; j < height; j++ {
-						for k := 0; k < width; k++ {
-							c.SetCell(k, j, canvas.Cell{Ch: ' ', A: im.clearAttr})
-						}
-					}
-					y -= lines
-				}
-				c.SetAttr(saved)
+			var err error
+			x, y, err = im.settle(c, x, y, wch, &width, &height, growx, growy)
+			if err != nil {
+				return 0, err
 			}
 			if wch != 0 {
 				c.Put(x, y, r)
@@ -436,6 +414,52 @@ func importANSI(c *canvas.Canvas, data []byte, isUTF8 bool) (int, error) {
 	}
 	c.GotoXY(x, y)
 	return i, nil
+}
+
+// settle applies libcaca's common "wrap long lines or grow horizontally" and
+// "scroll or grow vertically" steps. The C importer runs both on every loop
+// iteration, including control characters, with wch == 0 when no character is
+// emitted.
+func (im *ansiImport) settle(c *canvas.Canvas, x, y, wch int, width, height *int, growx, growy bool) (int, int, error) {
+	for x+wch > *width {
+		if growx {
+			saved := c.CurAttr()
+			c.SetAttr(im.clearAttr)
+			if err := c.Resize(x+wch, *height); err != nil {
+				return x, y, err
+			}
+			*width = x + wch
+			c.SetAttr(saved)
+		} else {
+			x -= *width
+			y++
+		}
+	}
+	if y >= *height {
+		saved := c.CurAttr()
+		c.SetAttr(im.clearAttr)
+		if growy {
+			if err := c.Resize(*width, y+1); err != nil {
+				return x, y, err
+			}
+			*height = y + 1
+		} else {
+			lines := y - *height + 1
+			for j := 0; j+lines < *height; j++ {
+				for k := 0; k < *width; k++ {
+					c.SetCell(k, j, c.CellAt(k, j+lines))
+				}
+			}
+			for j := *height - lines; j < *height; j++ {
+				for k := 0; k < *width; k++ {
+					c.SetCell(k, j, canvas.Cell{Ch: ' ', A: im.clearAttr})
+				}
+			}
+			y -= lines
+		}
+		c.SetAttr(saved)
+	}
+	return x, y, nil
 }
 
 // importCSI handles one ESC [ sequence starting at i. It returns the next

@@ -75,11 +75,15 @@ const (
 
 // Options configures a Dither.
 type Options struct {
-	Antialias  Antialias
-	Color      ColorMode
-	Charset    Charset
-	Algorithm  Algorithm
-	Gamma      float64
+	Antialias Antialias
+	Color     ColorMode
+	Charset   Charset
+	Algorithm Algorithm
+	Gamma     float64
+	// Brightness and Contrast are accepted for API parity with libcaca.
+	// libcaca 0.99.beta20 stores caca_set_dither_brightness()/contrast()
+	// values but never applies them in caca_dither_bitmap(); this port
+	// reproduces that behaviour rather than inventing a look.
 	Brightness float64
 	Contrast   float64
 	Invert     bool
@@ -542,10 +546,20 @@ func (d *Dither) Draw(c *canvas.Canvas, x, y, w, h int) error {
 					errB = b - (fgB*int32(ch)+bgB*(den-int32(ch)))/den
 				}
 			} else {
-				lum := max32(r, max32(g, b))
+				// libcaca keeps rgba[] in unsigned int. Floyd-Steinberg
+				// error terms are signed, so a negative residual wraps to a
+				// huge value before the glyph index is computed. Reproduce
+				// the 32-bit unsigned arithmetic exactly.
+				lum := uint32(r)
+				if uint32(g) > lum {
+					lum = uint32(g)
+				}
+				if uint32(b) > lum {
+					lum = uint32(b)
+				}
 				outfg = outbg
 				outbg = int(canvas.Black)
-				ch = int(lum * int32(dchmax) / 0x1000)
+				ch = int(lum * uint32(dchmax) / 0x1000)
 				if ch < 0 {
 					ch = 0
 				} else if ch > dchmax-1 {

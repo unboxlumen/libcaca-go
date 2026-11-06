@@ -33,8 +33,8 @@
 //   - codec — libcaca-compatible import and export of the native caca,
 //     ANSI, UTF-8, HTML, HTML3, BBCode, IRC, PostScript, SVG, TGA and troff
 //     formats.
-//   - font — bitmap fonts (Go Mono by default, or libcaca's native .data
-//     format), FIGlet/TOIlet FIGfonts, and canvas rendering.
+//   - font — libcaca's bundled bitmap fonts and native .data files,
+//     FIGlet/TOIlet FIGfonts, and canvas rendering.
 //   - charset — UTF-32 width classification plus CP437 and ASCII mappings.
 //   - display — the display-backend contract and the libcaca event model.
 //   - backend/tcell — a pure Go terminal backend built on tcell.

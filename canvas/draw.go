@@ -404,7 +404,7 @@ func (c *Canvas) FillEllipse(xo, yo, a, b int, ch rune) {
 	c.DrawLine(xo-x, yo-y, xo+x, yo-y, ch)
 	c.DrawLine(xo-x, yo+y, xo+x, yo+y, ch)
 
-	d2 := int(float64(b*b)*float64(x) + 0.5*float64(x) + 0.5 + float64(a*a*(y-1)*(y-1)) - float64(a*a*b*b))
+	d2 := int(float64(b*b)*(float64(x)+0.5)*(float64(x)+0.5) + float64(a*a*(y-1)*(y-1)) - float64(a*a*b*b))
 	for y > 0 {
 		if d2 < 0 {
 			d2 += b*b*(2*x+2) + a*a*(-2*y+3)
@@ -434,7 +434,7 @@ func (c *Canvas) DrawThinEllipse(xo, yo, a, b int) {
 		}
 		x++
 	}
-	d2 := int(float64(b*b)*float64(x) + 0.5*float64(x) + 0.5 + float64(a*a*(y-1)*(y-1)) - float64(a*a*b*b))
+	d2 := int(float64(b*b)*(float64(x)+0.5)*(float64(x)+0.5) + float64(a*a*(y-1)*(y-1)) - float64(a*a*b*b))
 	for y > 0 {
 		if d2 < 0 {
 			d2 += b*b*(2*x+2) + a*a*(-2*y+3)

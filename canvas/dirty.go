@@ -151,11 +151,13 @@ func (c *Canvas) mergeNewRect(n int) {
 		return
 	}
 
-	// Merge n into best.
-	c.dirty[best].X = minInt(c.dirty[best].X, c.dirty[n].X)
-	c.dirty[best].Y = minInt(c.dirty[best].Y, c.dirty[n].Y)
-	xmax := maxInt(c.dirty[best].X+c.dirty[best].W-1, c.dirty[n].X+c.dirty[n].W-1)
-	ymax := maxInt(c.dirty[best].Y+c.dirty[best].H-1, c.dirty[n].Y+c.dirty[n].H-1)
+	// Merge n into best. Compute the union from the old coordinates: c.dirty[best]
+	// must not be updated before its right/bottom edge has been read.
+	oldX, oldY := c.dirty[best].X, c.dirty[best].Y
+	xmax := maxInt(oldX+c.dirty[best].W-1, c.dirty[n].X+c.dirty[n].W-1)
+	ymax := maxInt(oldY+c.dirty[best].H-1, c.dirty[n].Y+c.dirty[n].H-1)
+	c.dirty[best].X = minInt(oldX, c.dirty[n].X)
+	c.dirty[best].Y = minInt(oldY, c.dirty[n].Y)
 	c.dirty[best].W = xmax - c.dirty[best].X + 1
 	c.dirty[best].H = ymax - c.dirty[best].Y + 1
 

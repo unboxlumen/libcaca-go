@@ -86,12 +86,17 @@ func (c *Canvas) FrameCount() int { return len(c.frames) }
 // CurrentFrame returns the current frame index.
 func (c *Canvas) CurrentFrame() int { return c.cur }
 
-// SetFrame selects the current frame.
+// SetFrame selects the current frame and marks the whole canvas dirty, like
+// caca_set_frame().
 func (c *Canvas) SetFrame(n int) error {
 	if n < 0 || n >= len(c.frames) {
 		return ErrNoFrame
 	}
+	if n == c.cur {
+		return nil
+	}
 	c.cur = n
+	c.addDirtyRect(0, 0, c.Width(), c.Height())
 	return nil
 }
 

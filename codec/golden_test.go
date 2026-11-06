@@ -58,6 +58,7 @@ func TestGoldenExports(t *testing.T) {
 		{"base.irc", "irc"},
 		{"base.ps", "ps"},
 		{"base.svg", "svg"},
+		{"base.tga", "tga"},
 		{"base.troff", "troff"},
 		{"base.caca", "caca"},
 	}
@@ -123,6 +124,34 @@ func TestGoldenArea(t *testing.T) {
 	}
 	if !bytes.Equal(got, want) {
 		t.Fatalf("area.caca differs\n%s", diff(got, want))
+	}
+}
+
+func TestGoldenEllipse(t *testing.T) {
+	c := canvas.MustNew(20, 10)
+	if err := c.SetColor(canvas.LightGray, canvas.Blue); err != nil {
+		t.Fatal(err)
+	}
+	c.FillBox(0, 0, 20, 10, '.')
+	if err := c.SetColor(canvas.Yellow, canvas.Black); err != nil {
+		t.Fatal(err)
+	}
+	c.DrawThinEllipse(5, 5, 4, 3)
+	if err := c.SetColor(canvas.Red, canvas.DarkGray); err != nil {
+		t.Fatal(err)
+	}
+	c.FillEllipse(14, 5, 4, 3, '@')
+
+	got, err := Export(c, "caca")
+	if err != nil {
+		t.Fatal(err)
+	}
+	want, err := os.ReadFile("testdata/golden/ellipse.caca")
+	if err != nil {
+		t.Fatal(err)
+	}
+	if !bytes.Equal(got, want) {
+		t.Fatalf("ellipse.caca differs\n%s", diff(got, want))
 	}
 }
 

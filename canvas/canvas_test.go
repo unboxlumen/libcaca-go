@@ -348,6 +348,68 @@ func TestDirtySimplify(t *testing.T) {
 	}
 }
 
+// TestDirtyMergeUpward checks merge ordering: when the dirty list is full and
+// the new rectangle extends an existing one upwards, the union must be
+// computed from the old bottom edge. This sequence matches
+// caca/t/dirty.cpp's scenario and libcaca's output.
+func TestDirtyMergeUpward(t *testing.T) {
+	c := MustNew(40, 20)
+	c.ClearDirtyRects()
+	pts := [][2]int{
+		{0, 0}, {7, 13}, {14, 6}, {21, 19}, {28, 12},
+		{35, 5}, {2, 18}, {9, 11}, {16, 4}, {23, 17},
+	}
+	for i, p := range pts {
+		c.Put(p[0], p[1], rune('a'+i))
+	}
+	want := []Rect{
+		{0, 0, 1, 1},
+		{7, 11, 3, 3},
+		{14, 4, 3, 3},
+		{21, 17, 3, 3},
+		{28, 12, 1, 1},
+		{35, 5, 1, 1},
+		{2, 18, 1, 1},
+	}
+	got := c.DirtyRects()
+	if len(got) != len(want) {
+		t.Fatalf("dirty = %+v, want %+v", got, want)
+	}
+	for i := range want {
+		if got[i] != want[i] {
+			t.Fatalf("dirty[%d] = %+v, want %+v (all: %+v)", i, got[i], want[i], got)
+		}
+	}
+}
+
+// TestSetFrameMarksDirty mirrors caca_set_frame(): switching frames marks the
+// whole canvas dirty, and selecting the current frame is a no-op.
+func TestSetFrameMarksDirty(t *testing.T) {
+	c := MustNew(10, 4)
+	if err := c.CreateFrame(0); err != nil {
+		t.Fatal(err)
+	}
+	// caca_create_frame() inserts before the current frame and then follows
+	// it, so the new frame becomes current.
+	if c.CurrentFrame() != 1 {
+		t.Fatalf("current frame = %d, want 1", c.CurrentFrame())
+	}
+	c.ClearDirtyRects()
+	if err := c.SetFrame(0); err != nil {
+		t.Fatal(err)
+	}
+	if got := c.DirtyRects(); len(got) != 1 || got[0] != (Rect{0, 0, 10, 4}) {
+		t.Fatalf("set frame dirty = %+v", got)
+	}
+	c.ClearDirtyRects()
+	if err := c.SetFrame(0); err != nil {
+		t.Fatal(err)
+	}
+	if c.DirtyRectCount() != 0 {
+		t.Fatalf("same frame dirty = %+v", c.DirtyRects())
+	}
+}
+
 func clone(c *Canvas) *Canvas {
 	n := MustNew(c.Width(), c.Height())
 	copy(n.Cells(), c.Cells())

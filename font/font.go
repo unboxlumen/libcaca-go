@@ -12,10 +12,11 @@
 
 // Package font renders a character canvas into a bitmap.
 //
-// The default font is Go Mono (BSD licensed), loaded from
-// golang.org/x/image/font/gofont. The libcaca native bitmap-font format is
-// intentionally not required for the pure Go build; a parser can be added
-// later without changing this interface.
+// libcaca's bundled Monospace 9 and Monospace Bold 12 bitmap fonts are
+// embedded and available through LoadBuiltin; they are the default for the
+// TGA exporter, just like caca_export_canvas_to_memory(). Any other libcaca
+// .data font can be loaded with LoadBitmapFont. Default() provides Go Mono
+// for callers that want a scalable font (the preview package uses it).
 package font
 
 import (

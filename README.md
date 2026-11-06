@@ -32,13 +32,25 @@ ansi, _ := codec.Export(c, "ansi")
 | Dithering (6 algorithms, 7 colour modes, 3 charsets) | complete, golden-tested |
 | Import: `caca`, `text`, `ansi`, `utf8`, `bin`, auto-detect | complete |
 | Export: `caca`, `ansi`, `utf8`, `utf8cr`, `html`, `html3`, `bbfr`, `irc`, `ps`, `svg`, `tga`, `troff` | complete |
-| Bitmap fonts (libcaca `.data`), FIGlet/TOIlet FIGfonts | complete |
+| Bitmap fonts (libcaca `.data`, bundled Monospace 9/Bold 12), FIGlet/TOIlet FIGfonts | complete |
 | Display backends | `tcell` (pure Go) and `null` |
 | Platform drivers, `caca0`/`conio` compatibility layers | not ported |
 
-Differences from the C library are intentional and documented: random
-dithering uses a fixed seed so output is reproducible, and the TGA exporter
-renders with Go Mono by default instead of libcaca's bundled bitmap font.
+Differences from the C library are intentional and documented:
+
+- Random dithering uses a fixed seed so output is reproducible.
+- Whole-canvas native `caca` import replaces the canvas contents. libcaca
+  keeps the destination canvas' pre-existing frame and adds the imported
+  frames after it, so importing into a fresh canvas leaves an extra empty
+  frame; area import matches libcaca byte-for-byte.
+- A `troff` export of a Default foreground uses `white`. libcaca reads past
+  the end of its colour-name table in that case and emits `\m[(null)]`.
+- Canvas dimensions are capped at `canvas.MaxCells` (16 Mi cells) so a
+  malicious file cannot turn a small import into an unbounded allocation.
+  libcaca only rejects dimensions whose product overflows `INT_MAX`.
+- `Dither` accepts brightness and contrast options for API parity, but does
+  not apply them, because libcaca 0.99.beta20 stores those values without
+  using them in `caca_dither_bitmap()`.
 
 ## Install
 
@@ -55,7 +67,7 @@ Requires Go 1.26 or newer.
 | `canvas` | Character grid: cells, attributes, frames, dirty rectangles, primitives, transforms |
 | `dither` | Bitmap → character cells: 6 algorithms, 7 colour modes, 3 glyph ramps |
 | `codec` | Import/export in the formats listed above |
-| `font` | Go Mono by default, libcaca native bitmap fonts, FIGlet/TOIlet FIGfonts, canvas rendering |
+| `font` | libcaca's bundled bitmap fonts, libcaca native `.data` files, FIGlet/TOIlet FIGfonts, Go Mono for previews, canvas rendering |
 | `charset` | Fullwidth classification, CP437, ASCII |
 | `display` | Backend contract and the libcaca event/key model |
 | `backend/tcell` | Pure Go terminal backend (keyboard, SGR mouse, resize) |
@@ -92,7 +104,7 @@ go test -run Fuzz -fuzz FuzzImportCaca ./codec   # fuzzing targets
 go test -bench . ./dither ./codec
 ```
 
-83 golden fixtures are checked in under `*/testdata/golden/`. They were
+80 golden fixtures are checked in under `*/testdata/golden/`. They were
 produced by the C library using the small programs in `*/testdata/gen/`, so
 the tests compare nfilesart's bytes against libcaca's own output rather than
 against hand-written expectations.

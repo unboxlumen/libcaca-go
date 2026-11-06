@@ -5,3 +5,5 @@
 codec/testdata/** -text
 dither/testdata/** -text
 font/testdata/** -text
+# Embedded libcaca font blobs are binary; never normalise line endings.
+font/data/** -text

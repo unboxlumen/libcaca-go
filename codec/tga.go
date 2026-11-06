@@ -22,13 +22,14 @@ import (
 	"github.com/unboxlumen/libcaca-go/font"
 )
 
-// exportTGA renders the canvas with the default Go Mono font into an
-// uncompressed 32-bit TGA image.
+// exportTGA renders the canvas with libcaca's bundled Monospace 9 bitmap
+// font into an uncompressed 32-bit TGA image. This is the same default font
+// caca_export_canvas_to_memory() uses for the "tga" format.
 func exportTGA(v view, face font.Font) ([]byte, error) {
 	f := face
 	if f == nil {
 		var err error
-		f, err = font.Default()
+		f, err = font.LoadBuiltin("Monospace 9")
 		if err != nil {
 			return nil, err
 		}
